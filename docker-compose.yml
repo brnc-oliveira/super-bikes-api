@@ -1,0 +1,27 @@
+version: '3.2'
+services:
+  app:
+    image: node:16.14.2
+    container_name: super-bikes-api
+    user: 'root'
+    restart: always
+    working_dir: /app
+    # network_mode: "host" use em linux
+    network_mode: 'host'
+    volumes:
+      - ./:/app
+
+    depends_on:
+      - db
+    command: bash -c "npm install --legacy-peer-deps; npm i -g @nestjs/cli; yarn run start:debug"
+  db:
+    container_name: super-bikes-database
+    image: postgres
+    restart: always
+    network_mode: 'host'
+    # ports:
+    #   - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: postgres
+      POSTGRES_DB: vehicle_hering
